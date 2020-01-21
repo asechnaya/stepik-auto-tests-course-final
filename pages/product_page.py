@@ -9,11 +9,11 @@ class PageObject(BasePage):
         basket_link.click()
 
     def should_be_basket_page(self):
-        self.should_be_promo_url()
+        # self.should_be_promo_url()
         self.should_be_basket_link()
 
     def should_be_promo_url(self):
-        assert '?promo=newYear' in self.browser.current_url, "Login url is not found"
+        assert '?promo' in self.browser.current_url, "Login url is not found"
         # реализуйте проверку на корректный url адрес
 
     def should_be_basket_link(self):
@@ -21,5 +21,7 @@ class PageObject(BasePage):
 
     def should_be_alert(self):
         assert self.browser.switch_to.alert, "There is no alert"
+        print(self.browser.switch_to.alert.text)
+
 
 
