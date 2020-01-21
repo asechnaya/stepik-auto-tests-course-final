@@ -20,4 +20,4 @@ def test_guest_can_add_product_to_basket(browser, promo_offer):
     basketpage.click_the_basket_button()
     basketpage.should_be_alert()
     page.solve_quiz_and_get_code()
-    № basketpage.should_be_alert()
+    # basketpage.should_be_alert()
