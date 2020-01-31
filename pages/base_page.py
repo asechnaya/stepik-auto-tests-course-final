@@ -84,3 +84,12 @@ class BasePage:
         select.select_by_visible_text('British English')
         go_button = self.browser.find_element(*BasketPageLocators.LANGUAGE_ACCEPT)
         go_button.click()
+
+    def basket_should_have_amount(self):
+        assert self.is_element_present(*MainPageLocators.BASKET_AMOUNT), "No text with amount"
+
+    def basket_should_be_equal_zero(self):
+        basket_amount = WebDriverWait(self.browser, 20).until(
+            EC.presence_of_element_located(MainPageLocators.BASKET_AMOUNT)).text
+        assert 'Basket total: £0.00' in basket_amount, "Basket is not empty"
+

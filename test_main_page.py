@@ -22,7 +22,7 @@ def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
     page.should_be_brenglish_language()
     page.should_be_basket_link()
     # Ожидаем, что в корзине нет товаров    ||  Your basket is empty
-    page.basket_should_be_amount()
+    page.basket_should_have_amount()
     page.basket_should_be_equal_zero()
     # Переходит в корзину по кнопке в шапке сайта
     page.go_to_basket()

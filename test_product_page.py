@@ -96,4 +96,19 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
 
 
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
-    pass
+    # Гость открывает главную страницу
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    # Меняем язык на Британский Английский
+    page.should_be_brenglish_language()
+    page.should_be_basket_link()
+    # Ожидаем, что в корзине нет товаров    ||  Your basket is empty
+    page.basket_should_have_amount()
+    page.basket_should_be_equal_zero()
+    # Переходит в корзину по кнопке в шапке сайта
+    page.go_to_basket()
+    basket_page = BasketPage(browser, link)
+    basket_page.should_be_basket_url()
+    # Ожидаем, что есть текст о том что корзина пуста
+    basket_page.basket_should_be_empty()
