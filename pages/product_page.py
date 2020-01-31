@@ -6,7 +6,7 @@ import time
 
 
 class ProductPage(BasePage):
-    def click_the_basket_button(self):
+    def click_add_to_the_basket_button(self):
         basket_link = self.browser.find_element(*BasketPageLocators.BASKET_LINK)
         basket_link.click()
 

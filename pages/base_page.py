@@ -4,6 +4,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pages.locators import BasePageLocators, ProductPageLocators
+from pages.locators import MainPageLocators, BasketPageLocators
+from selenium.webdriver.support.ui import Select
 import math
 
 
@@ -56,7 +58,7 @@ class BasePage:
         return True
 
     def go_to_login_page(self):
-        link = self.browser.find_element(*BasePageLocators.LOGIN_LINK_INVALID)
+        link = self.browser.find_element(*BasePageLocators.LOGIN_LINK)
         link.click()
 
     def should_be_login_link(self):
@@ -69,3 +71,16 @@ class BasePage:
     def should_be_disappeared_success_message(self):
         assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
             "Success message is presented, but should not be"
+
+    def go_to_basket(self):
+        link = self.browser.find_element(*MainPageLocators.BASKET_BUTTON)
+        link.click()
+
+    def should_be_basket_link(self):
+        assert self.is_element_present(*MainPageLocators.BASKET_BUTTON), "Basket link is not presented"
+
+    def should_be_brenglish_language(self):
+        select = Select(self.browser.find_element_by_name('language'))
+        select.select_by_visible_text('British English')
+        go_button = self.browser.find_element(*BasketPageLocators.LANGUAGE_ACCEPT)
+        go_button.click()

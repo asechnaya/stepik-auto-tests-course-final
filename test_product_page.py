@@ -1,5 +1,7 @@
 import pytest
 import time
+from pages.basket_page import BasketPage
+from pages.login_page import LoginPage
 from pages.main_page import MainPage
 from pages.product_page import ProductPage
 
@@ -34,7 +36,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     # Добавляем товар в корзину
     basketpage = ProductPage(browser, browser.current_url)
     basketpage.should_be_basket_page()
-    basketpage.click_the_basket_button()
+    basketpage.click_add_to_the_basket_button()
     basketpage.should_be_alert()
     page.solve_quiz_and_get_code()
     # basketpage.should_be_add_to_cart_text()
@@ -64,7 +66,7 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     # Добавляем товар в корзину
     basketpage = ProductPage(browser, browser.current_url)
     basketpage.should_be_basket_page()
-    basketpage.click_the_basket_button()
+    basketpage.click_add_to_the_basket_button()
     basketpage.should_be_alert()
     page.solve_quiz_and_get_code()
     basketpage.should_be_add_to_cart_text()
@@ -73,15 +75,25 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     basketpage.should_be_disappeared_success_message()
 
 def test_guest_should_see_login_link_on_product_page(browser):
+    browser.delete_all_cookies()
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
     page.open()
     page.should_be_login_link()
 
+
 def test_guest_can_go_to_login_page_from_product_page(browser):
+    browser.delete_all_cookies()
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
     page.open()
     page.should_be_login_link()
     page.go_to_login_page()
-    page.should_be_login_link()
+    login_page = LoginPage(browser, browser.current_url)
+    login_page.should_be_login_page()
+    login_page.should_be_login_url()
+    login_page.should_be_login_form()
+
+
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
+    pass

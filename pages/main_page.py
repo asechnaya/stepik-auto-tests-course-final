@@ -1,25 +1,23 @@
 from .base_page import BasePage
-from .locators import MainPageLocators, ProductPageLocators
+from .locators import MainPageLocators
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
-
-# Это было раньше тут
-# class MainPage(BasePage):
-    # def go_to_login_page(self):
-    #     link = self.browser.find_element(*MainPageLocators.LOGIN_LINK)
-    #     link.click()
-    #    # return LoginPage(browser=self.browser, url=self.browser.current_url)
-    #
-    # def should_be_login_link(self):
-    #     assert self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"
-    #
-    # def should_not_be_success_message(self):
-    #     assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
-    #         "Success message is presented, but should not be"
-    #
-    # def should_be_disappeared_success_message(self):
-    #     assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
-    #        "Success message is presented, but should not be"
 
 class MainPage(BasePage):
-    def __init__(self, *args, **kwargs):
-        super(MainPage, self).__init__(*args, **kwargs)
+    def should_be_basket_button(self):
+        assert self.is_element_present(*MainPageLocators.BASKET_BUTTON), "Basket link is not presented"
+
+    def should_be_language_link(self):
+        assert self.is_element_present(*MainPageLocators.BASKET_BUTTON), "Basket link is not presented"
+
+    def basket_should_be_amount(self):
+        assert self.is_element_present(*MainPageLocators.BASKET_AMOUNT), "No text with amount"
+
+    def basket_should_be_equal_zero(self):
+        basket_amount = WebDriverWait(self.browser, 20).until(
+            EC.presence_of_element_located(MainPageLocators.BASKET_AMOUNT)).text
+        print(basket_amount)
+        assert 'Basket total: £0.00' in basket_amount, "Basket is not empty"
+
+
