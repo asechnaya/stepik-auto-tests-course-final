@@ -34,7 +34,7 @@ class BasePage:
         try:
             alert = self.browser.switch_to.alert
             alert_text = alert.text
-            print(f"Your code: {alert_text}")
+            print(f"{alert_text}")
             alert.accept()
         except NoAlertPresentException:
             print("No second alert presented")
@@ -80,7 +80,7 @@ class BasePage:
         assert self.is_element_present(*MainPageLocators.BASKET_BUTTON), "Basket link is not presented"
 
     def should_be_brenglish_language(self):
-        select = Select(self.browser.find_element_by_name('language'))
+        select = Select(self.browser.find_element(*BasketPageLocators.LANGUAGE))
         select.select_by_visible_text('British English')
         go_button = self.browser.find_element(*BasketPageLocators.LANGUAGE_ACCEPT)
         go_button.click()
@@ -92,4 +92,8 @@ class BasePage:
         basket_amount = WebDriverWait(self.browser, 20).until(
             EC.presence_of_element_located(MainPageLocators.BASKET_AMOUNT)).text
         assert 'Basket total: £0.00' in basket_amount, "Basket is not empty"
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
 

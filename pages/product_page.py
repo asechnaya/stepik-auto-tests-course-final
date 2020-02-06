@@ -2,7 +2,6 @@ from .base_page import BasePage
 from .locators import BasketPageLocators, ProductPageLocators
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 
 
 class ProductPage(BasePage):
@@ -11,10 +10,10 @@ class ProductPage(BasePage):
         basket_link.click()
 
     def should_be_basket_page(self):
-        self.should_be_basket_link()
+        assert '/basket/' in self.browser.current_url, "Basket url is not found"
 
     def should_be_promo_url(self):
-        assert '?promo' in self.browser.current_url, "Login url is not found"
+        assert '?promo' in self.browser.current_url, "Promo url is not found"
 
     def should_be_basket_link(self):
         assert WebDriverWait(self.browser, 20).until(
@@ -30,7 +29,6 @@ class ProductPage(BasePage):
             EC.presence_of_element_located(BasketPageLocators.BASKET_QUALIFIES_TEXT)).text
         basket_total = WebDriverWait(self.browser, 20).until(
             EC.presence_of_element_located(BasketPageLocators.BASKET_TOTAL_TEXT)).text
-        print(basket_total)
         assert coders_at_work == 'Coders at Work has been added to your basket.', self.browser.current_url
         assert basket_qualifies == 'Your basket now qualifies for the Deferred benefit offer offer.', \
             self.browser.current_url
@@ -43,7 +41,5 @@ class ProductPage(BasePage):
     def should_be_disappeared_success_message(self):
         assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
            "Success message is presented, but should not be"
-
-
 
 
