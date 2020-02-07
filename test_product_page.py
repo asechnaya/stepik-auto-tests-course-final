@@ -8,6 +8,40 @@ from pages.main_page import MainPage
 from pages.product_page import ProductPage
 
 
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        # открыть страницу регистрации
+        link = 'http://selenium1py.pythonanywhere.com/en-gb/accounts/login/'
+        register_page = LoginPage(browser, link)
+        register_page.open()
+        # зарегистрировать нового пользователя
+        email = f'{time.time()}@fakemail.org'
+        password = str(time.time())
+        register_page.register_new_user(email, password)
+        register_page.user_should_see_register_success_message()
+        # проверить, что пользователь залогинен
+        register_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
+        page = ProductPage(browser, link)
+        page.open()
+        # Проверяем, что нет сообщения об успехе с помощью is_not_element_present
+        page.should_not_be_success_message()
+
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear"
+        product_page = ProductPage(browser, link)
+        product_page.open()
+        product_page.click_add_to_the_basket_button()
+        product_page.should_be_alert()
+        product_page.solve_quiz_and_get_code()
+        product_page.should_be_add_to_cart_text()
+        product_page.basket_should_have_amount()
+
+
 def test_guest_cant_see_success_message(browser):
     # Открываем страницу товара
     browser.delete_all_cookies()
@@ -115,37 +149,3 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     # Ожидаем, что есть текст о том что корзина пуста
     basket_page.basket_should_be_empty()
 
-
-@pytest.mark.login
-class TestUserAddToBasketFromProductPage:
-    @pytest.fixture(autouse=True)
-    def setup(self, browser):
-        # открыть страницу регистрации
-        link = 'http://selenium1py.pythonanywhere.com/en-gb/accounts/login/'
-        register_page = LoginPage(browser, link)
-        register_page.open()
-        # зарегистрировать нового пользователя
-        email = f'{time.time()}@fakemail.org'
-        password = str(time.time())
-        register_page.register_new_user(email, password)
-        register_page.user_should_see_register_success_message()
-        # проверить, что пользователь залогинен
-        register_page.should_be_authorized_user()
-
-    def test_user_cant_see_success_message(self, browser):
-        link = 'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
-        page = ProductPage(browser, link)
-        page.open()
-        # Проверяем, что нет сообщения об успехе с помощью is_not_element_present
-        page.should_not_be_success_message()
-
-    @pytest.mark.need_review
-    def test_user_can_add_product_to_basket(self, browser):
-        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear"
-        product_page = ProductPage(browser, link)
-        product_page.open()
-        product_page.click_add_to_the_basket_button()
-        product_page.should_be_alert()
-        product_page.solve_quiz_and_get_code()
-        product_page.should_be_add_to_cart_text()
-        product_page.basket_should_have_amount()
