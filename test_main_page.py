@@ -1,7 +1,8 @@
-from pages.basket_page import BasketPage
-from pages.main_page import MainPage
-from pages.login_page import LoginPage
 import pytest
+
+from pages.basket_page import BasketPage
+from pages.login_page import LoginPage
+from pages.main_page import MainPage
 
 
 @pytest.mark.login_guest
@@ -22,15 +23,14 @@ class TestLoginFromMainPage:
         page.should_be_login_link()
 
 
-
 def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
     # Гость открывает главную страницу
-    link = f"http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/"
+    link = f'http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/'
     page = MainPage(browser, link)
     page.open()
     # Меняем язык на Британский Английский
     page.should_be_brenglish_language()
-    page.should_be_basket_link()
+    page.should_be_basket_button()
     # Ожидаем, что в корзине нет товаров    ||  Your basket is empty
     page.basket_should_have_amount()
     page.basket_should_be_equal_zero()

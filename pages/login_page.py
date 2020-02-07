@@ -1,8 +1,8 @@
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
 from .base_page import BasePage
 from .locators import LoginPageLocators
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
 
 
 class LoginPage(BasePage):
@@ -12,16 +12,16 @@ class LoginPage(BasePage):
         self.should_be_register_form()
 
     def should_be_login_url(self):
-        assert '/login/' in self.browser.current_url, "Login url is not found"
+        assert '/login/' in self.browser.current_url, 'Login url is not found'
         # реализуйте проверку на корректный url адрес
 
     def should_be_login_form(self):
-        assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), "Login form is not presented"
         # реализуйте проверку, что есть форма логина
+        assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), 'Login form is not presented'
 
     def should_be_register_form(self):
         # реализуйте проверку, что есть форма регистрации на странице
-        assert self.is_element_present(*LoginPageLocators.REG_FORM), "Register form is not presented"
+        assert self.is_element_present(*LoginPageLocators.REG_FORM), 'Register form is not presented'
 
     def register_new_user(self, email, password):
         email_input = self.browser.find_element(*LoginPageLocators.EMAIL_REG)

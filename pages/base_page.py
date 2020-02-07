@@ -1,16 +1,24 @@
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from pages.locators import BasePageLocators, ProductPageLocators
-from pages.locators import MainPageLocators, BasketPageLocators
-from selenium.webdriver.support.ui import Select
 import math
+from typing import Union
+
+from selenium import webdriver
+from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import WebDriverWait
+
+from pages.locators import (
+    BasePageLocators,
+    ProductPageLocators,
+    MainPageLocators,
+    BasketPageLocators,
+)
 
 
 class BasePage:
-    def __init__(self, browser, url, timeout=10):
+    def __init__(self, browser: Union[webdriver.Chrome, webdriver.Firefox], url: str, timeout: int = 10):
         self.browser = browser
         self.url = url
         self.browser.implicitly_wait(timeout)
@@ -33,18 +41,18 @@ class BasePage:
         alert.accept()
         try:
             alert = self.browser.switch_to.alert
+        except NoAlertPresentException:
+            print("No second alert presented")
+        else:
             alert_text = alert.text
             print(f"{alert_text}")
             alert.accept()
-        except NoAlertPresentException:
-            print("No second alert presented")
 
     def is_not_element_present(self, how, what, timeout=4):
         try:
             WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
         except TimeoutException:
             return True
-
         return False
 
     def is_disappeared(self, how, what, timeout=4):
@@ -54,7 +62,6 @@ class BasePage:
             )
         except TimeoutException:
             return False
-
         return True
 
     def go_to_login_page(self):
@@ -75,9 +82,6 @@ class BasePage:
     def go_to_basket(self):
         link = self.browser.find_element(*MainPageLocators.BASKET_BUTTON)
         link.click()
-
-    def should_be_basket_link(self):
-        assert self.is_element_present(*MainPageLocators.BASKET_BUTTON), "Basket link is not presented"
 
     def should_be_brenglish_language(self):
         select = Select(self.browser.find_element(*BasketPageLocators.LANGUAGE))
